@@ -5,7 +5,7 @@ import { FiEye, FiEyeOff } from 'react-icons/fi';
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 300px; // Você pode ajustar a largura conforme necessário
+  width: 100%;
   font-family: Arial, sans-serif;
 `;
 
@@ -25,9 +25,9 @@ const InputWrapper = styled.div`
 
 const StyledInput = styled.input`
   width: 100%;
-  padding: 12px 40px 12px 16px; // Espaço à direita para o ícone
+  padding: 12px 40px 12px 16px;
   border: 1px solid #E0E0E0;
-  border-radius: 50px; // Bordas arredondadas para o formato de pílula
+  border-radius: 50px;
   font-size: 1rem;
   background-color: #FFFFFF;
   color: #333;

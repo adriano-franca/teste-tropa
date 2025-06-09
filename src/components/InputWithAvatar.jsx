@@ -8,7 +8,6 @@ const ComponentContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 300px;
   font-family: Arial, sans-serif;
 `;
 

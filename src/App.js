@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-// Estilos e Layout
 import { GlobalStyle } from './styles/GlobalStyles';
 
-// Componentes
 import Button from './components/Button';
 import InputField from './components/InputField';
 import PasswordInput from './components/PasswordField';
@@ -16,7 +14,7 @@ import SelectInput from './components/SelectInput';
 import Switch from './components/Switch';
 import Sidebar from './components/Sidebar';
 import EventosPage from './components/EventosPage';
-import ContextMenu from './components/ContextMenu';
+import LoginPage from './pages/LoginPage';
 
 import AvatarTeste from './assets/perfil.jpg';
 import logoUrl from './assets/logo.png';
@@ -60,9 +58,6 @@ function App() {
   const handleModalidadeChange = (selected) => {
     console.log("Modalidade alterada para:", selected);
   };
-  const handleView = () => alert("Visualizar item");
-  const handleEdit = () => alert("Editar item");
-  const handleRemove = () => alert("Remover item");
 
   const currentUser = {
     name: "Adriano França",
@@ -72,6 +67,10 @@ function App() {
 
   return (
     <>
+    <GlobalStyle />
+    <LoginPage />
+    </>
+    /*<>
       <GlobalStyle />
       <AppLayout>
         <Sidebar logoUrl={logoUrl} user={currentUser} activePath={'/eventos'} />
@@ -104,7 +103,7 @@ function App() {
         </MainContent>
       </AppLayout>
     </>
-  );
+  */);
 }
 
 export default App;
