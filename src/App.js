@@ -15,14 +15,12 @@ import DropdownSearch from './components/DropdownSearch';
 import SelectInput from './components/SelectInput';
 import Switch from './components/Switch';
 import Sidebar from './components/Sidebar';
-import EventosPage from './components/EventosPage'; // Renomeei Table para EventosPage
+import EventosPage from './components/EventosPage';
 import ContextMenu from './components/ContextMenu';
 
-// Assets
 import AvatarTeste from './assets/perfil.jpg';
 import logoUrl from './assets/logo.png';
 
-// --- Constantes e Dados de Exemplo ---
 const opcoesDropDown = ["Opção 1", "Opção 2", "Opção 3", "Opção 4"];
 const opcoesSelect = [
   { value: 'opcao1', label: 'Opção 1' },
@@ -35,7 +33,6 @@ const dadosDosEventos = [
   { id: 3, nome: 'Festa do Peão de Barretos', equipes: 150, status: 'Encerrado', data: '20 a 25 de Maio' },
 ];
 
-// --- Layout Principal ---
 const AppLayout = styled.div`
   display: flex;
   height: 100vh;
@@ -48,7 +45,6 @@ const MainContent = styled.main`
   padding: 32px;
 `;
 
-// Container para organizar o showcase de componentes
 const ShowcaseContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -61,7 +57,6 @@ const ShowcaseContainer = styled.div`
 function App() {
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Funções de handler
   const handleModalidadeChange = (selected) => {
     console.log("Modalidade alterada para:", selected);
   };
@@ -69,7 +64,6 @@ function App() {
   const handleEdit = () => alert("Editar item");
   const handleRemove = () => alert("Remover item");
 
-  // Dados do usuário para a Sidebar
   const currentUser = {
     name: "Adriano França",
     role: "Administrador",
@@ -83,9 +77,7 @@ function App() {
         <Sidebar logoUrl={logoUrl} user={currentUser} activePath={'/eventos'} />
         
         <MainContent>
-          {/* Showcase de componentes individuais */}
           <ShowcaseContainer>
-            <h2>Componentes Individuais</h2>
             <InputField label="Nome completo" placeholder="Digite aqui seu nome" />
             <PasswordInput label="Senha"/>
             <InputWithAvatar label="Selecione seu avatar" avatarSrc={AvatarTeste} fileUploadId="chat-message"/>
@@ -99,10 +91,8 @@ function App() {
               onToggle={handleModalidadeChange}
             />
             <Button>Enviar</Button>
-            <ContextMenu onView={handleView} onEdit={handleEdit} onRemove={handleRemove} />
           </ShowcaseContainer>
 
-          {/* Componente de Tabela/Página */}
           <EventosPage
             data={dadosDosEventos}
             pagination={{
