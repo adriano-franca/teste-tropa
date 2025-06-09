@@ -1,0 +1,218 @@
+import React from 'react';
+import styled from 'styled-components';
+import { FiPlus, FiSearch } from 'react-icons/fi';
+import ContextMenu from './ContextMenu';
+
+const PageWrapper = styled.div`
+  padding: 32px;
+  background-color: #FAFAFA;
+  font-family: Arial, sans-serif;
+  height: 100vh;
+`;
+const PageHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+`;
+const PageTitle = styled.h1`
+  font-size: 1.75rem;
+  color: #E87A3E;
+  margin: 0;
+`;
+const ActionsContainer = styled.div`
+  display: flex;
+  gap: 16px;
+`;
+const SearchWrapper = styled.div`
+  position: relative;
+  width: 250px;
+`;
+const SearchInput = styled.input`
+  width: 100%;
+  padding: 12px 16px 12px 40px;
+  border-radius: 50px;
+  border: 1px solid #E0E0E0;
+  background-color: #FFFFFF;
+  font-size: 0.9rem;
+  &:focus { outline: none; border-color: #E87A3E; }
+`;
+const SearchIcon = styled(FiSearch)`
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #A0A0A0;
+`;
+const Button = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: ${props => (props.primary ? '#E87A3E' : '#E0E0E0')};
+  color: ${props => (props.primary ? '#FFFFFF' : '#555')};
+  
+  &:hover { opacity: 0.9; }
+`;
+const TableWrapper = styled.div`
+  background-color: #FFFFFF;
+  border: 1px solid #F0F0F0;
+  border-radius: 16px;
+  overflow: hidden;
+`;
+const StyledTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+`;
+const TableHead = styled.thead`
+  th {
+    padding: 16px;
+    text-align: left;
+    font-size: 0.8rem;
+    color: #E87A3E;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+  }
+`;
+const TableRow = styled.tr`
+  &:not(:last-child) {
+    border-bottom: 1px solid #F0F0F0;
+  }
+`;
+const TableCell = styled.td`
+  padding: 16px;
+  font-size: 0.95rem;
+  color: #333;
+  vertical-align: middle;
+`;
+const PaginationWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 24px;
+  gap: 8px;
+`;
+const PageButton = styled.button`
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #E0E0E0;
+  cursor: pointer;
+  font-weight: 500;
+  background-color: ${props => (props.isActive ? '#E87A3E' : '#FFFFFF')};
+  color: ${props => (props.isActive ? '#FFFFFF' : '#555')};
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+`;
+const StatusBadge = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: ${props => {
+      switch (props.status) {
+        case 'Ativo': return '#28A745';
+        case 'Encerrado': return '#DC3545';
+        case 'Agendado': return '#FFC107';
+        default: return '#6C757D';
+      }
+    }};
+  }
+`;
+
+export default function EventosPage({ data = [], pagination = {} }) {
+  const { currentPage, totalPages, onPageChange } = pagination;
+
+  const columns = [
+    { key: 'nome', header: 'Nome do evento' },
+    { key: 'equipes', header: 'Total de equipes' },
+    { 
+      key: 'status', 
+      header: 'Status',
+      render: (row) => <StatusBadge status={row.status}>{row.status}</StatusBadge>
+    },
+    { key: 'data', header: 'Data' },
+    { 
+      key: 'actions', 
+      header: '',
+      style: { textAlign: 'right' },
+      render: (row) => (
+        <ContextMenu
+          onView={() => alert(`Visualizando: ${row.nome}`)}
+          onEdit={() => alert(`Editando: ${row.nome}`)}
+          onRemove={() => alert(`Removendo: ${row.nome}`)}
+        />
+      )
+    },
+  ];
+
+  return (
+    <PageWrapper>
+      <PageHeader>
+        <PageTitle>Eventos</PageTitle>
+        <ActionsContainer>
+          <SearchWrapper>
+            <SearchIcon size={18} />
+            <SearchInput placeholder="Buscar eventos" />
+          </SearchWrapper>
+          <Button primary onClick={() => alert('Abrir modal de novo evento!')}>
+            <FiPlus size={20} />
+            Inserir novo
+          </Button>
+        </ActionsContainer>
+      </PageHeader>
+      
+      <TableWrapper>
+        <StyledTable>
+          <TableHead>
+            <tr>
+              {columns.map((col) => (
+                <th key={col.key}>{col.header}</th>
+              ))}
+            </tr>
+          </TableHead>
+          <tbody>
+            {data.map((row) => (
+              <TableRow key={row.id}>
+                {columns.map((col) => (
+                  <TableCell key={col.key} style={col.style}>
+                    {col.render ? col.render(row) : row[col.key]}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </tbody>
+        </StyledTable>
+      </TableWrapper>
+
+      {totalPages > 1 && (
+        <PaginationWrapper>
+          <PageButton onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
+            Anterior
+          </PageButton>
+          {[...Array(totalPages).keys()].map(num => (
+            <PageButton
+              key={num + 1}
+              isActive={currentPage === num + 1}
+              onClick={() => onPageChange(num + 1)}
+            >
+              {num + 1}
+            </PageButton>
+          ))}
+          <PageButton onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+            Próxima
+          </PageButton>
+        </PaginationWrapper>
+      )}
+    </PageWrapper>
+  );
+}

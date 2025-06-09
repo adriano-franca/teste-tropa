@@ -1,11 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-// Importando os ícones que vamos usar
 import {
   FiGrid, FiCalendar, FiClock, FiUsers, FiUser, FiLogOut
 } from 'react-icons/fi';
 
-// --- Containers Principais ---
 const SidebarContainer = styled.aside`
   display: flex;
   flex-direction: column;
@@ -19,16 +17,20 @@ const SidebarContainer = styled.aside`
   flex-shrink: 0;
 `;
 
-const TopSection = styled.div``;
+const TopSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 const BottomSection = styled.div``;
 
-// --- Logo ---
 const Logo = styled.img`
-  height: 32px;
+  width: 235px;
+  display: block;
   margin-bottom: 32px;
+  height: 32px;
 `;
 
-// --- Navegação Principal ---
 const MenuHeader = styled.h3`
   font-size: 0.75rem;
   color: #A0A0A0;
@@ -36,12 +38,17 @@ const MenuHeader = styled.h3`
   letter-spacing: 1px;
   padding: 0 12px;
   margin-bottom: 8px;
+  align-self: flex-start;
 `;
 
 const NavList = styled.ul`
+  width: 100%;
   list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 `;
 
 const NavLink = styled.a`
@@ -55,7 +62,6 @@ const NavLink = styled.a`
   font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
-
   background-color: ${props => (props.isActive ? '#E87A3E' : 'transparent')};
   color: ${props => (props.isActive ? '#FFFFFF' : '#555555')};
 
@@ -64,46 +70,41 @@ const NavLink = styled.a`
   }
 `;
 
-// --- Seção do Perfil ---
 const Separator = styled.hr`
   border: none;
   border-top: 1px solid #F0F0F0;
   margin: 20px 0;
 `;
-
 const ProfileWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
 `;
-
 const Avatar = styled.img`
   width: 40px;
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
 `;
-
 const UserDetails = styled.div`
   display: flex;
   flex-direction: column;
 `;
-
 const UserName = styled.span`
   font-weight: bold;
   color: #333;
 `;
-
 const UserRole = styled.span`
   font-size: 0.8rem;
   color: #A0A0A0;
 `;
-
 const UserActionsList = styled.div`
   margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 `;
 
-// --- Componente Principal ---
 export default function Sidebar({ logoUrl, user, activePath }) {
   const menuItems = [
     { label: 'Dashboard', icon: <FiGrid size={20} />, path: '/dashboard' },
