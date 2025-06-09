@@ -72,15 +72,38 @@ const StyledForm = styled.form`
   gap: 16px;
 `;
 
-export default function LoginPage() {
+export default function LoginPage({ onLoginSuccess }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    alert(`Tentando fazer login com: ${email}`);
-  };
+    setIsLoading(true);
+  
+  try{
+    const response = await fetch('/users.json');
+    const users = await response.json();
 
+    console.log('Usuários carregados do JSON:', users);
+
+    const foundUser = users.find((user) => {
+      return user.email === email && user.password === password;
+    });
+
+    if (foundUser) {
+      onLoginSuccess(foundUser);
+    } else {
+      alert('E-mail ou senha incorretos.');
+    }
+
+  } catch (error) {
+    console.error('Erro ao buscar usuários:', error);
+    alert('Ocorreu um erro ao tentar fazer login. Tente novamente.');
+  } finally {
+    setIsLoading(false);
+  }
+};
   return (
     <LoginPageWrapper>
       <LoginCard>
@@ -97,13 +120,15 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              disabled={isLoading}
             />
             <PasswordField
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              disabled={isLoading}
             />
-            <Button primary type="submit" style={{ marginTop: '16px' }}>
-              Enviar
+            <Button primary type="submit" style={{ marginTop: '16px' }} disabled={isLoading}>
+              {isLoading ? 'Entrando...' : 'Enviar'}
             </Button>
           </StyledForm>
         </FormPanel>

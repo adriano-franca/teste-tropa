@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "email": "kaique@email.com",
+    "password": "123",
+    "name": "Kaique Steck",
+    "role": "Administrador",
+    "avatarUrl": "../src/assets/perfil.jpg"
+  },
+  {
+    "id": 2,
+    "email": "adriano@email.com",
+    "password": "456",
+    "name": "Adriano França",
+    "role": "Editor",
+    "avatarUrl": "../src/assets/perfil.jpg"
+  },
+  {
+    "id": 3,
+    "email": "admin@email.com",
+    "password": "1234",
+    "name": "Adriano França",
+    "role": "Administrador",
+    "avatarUrl": "../src/assets/perfil.jpg"
+  }
+]

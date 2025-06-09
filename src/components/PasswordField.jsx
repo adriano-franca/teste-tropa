@@ -56,9 +56,15 @@ const ToggleButton = styled.button`
   color: #E87A3E;
 `;
 
-const PasswordInput = () => {
-  const [password, setPassword] = useState('');
+// AQUI COMEÇAM AS MUDANÇAS
+// Renomeando para PasswordField para consistência, mas o nome da função não é o problema principal.
+export default function PasswordField({ label, ...props }) { // MODIFICAÇÃO 1: Aceitamos 'label' e todas as outras props (como value e onChange) vindas do pai.
+  
+  // O estado de visibilidade continua sendo um detalhe interno do componente, isso está correto.
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  // MODIFICAÇÃO 2: Removemos o estado interno da senha. Agora a LoginPage que vai controlar isso.
+  // const [password, setPassword] = useState(''); <<-- REMOVER ESTA LINHA
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible((prevState) => !prevState);
@@ -66,14 +72,15 @@ const PasswordInput = () => {
 
   return (
     <InputContainer>
-      <Label htmlFor="password">Senha</Label>
+      {/* Usamos a prop 'label' para tornar o componente mais reutilizável */}
+      {label && <Label>{label}</Label>}
       <InputWrapper>
         <StyledInput
-          id="password"
           type={isPasswordVisible ? 'text' : 'password'}
           placeholder="Digite aqui"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          
+          // MODIFICAÇÃO 3: Repassamos todas as props recebidas (value, onChange, disabled, etc.) para o input real.
+          {...props}
         />
         <ToggleButton type="button" onClick={togglePasswordVisibility}>
           {isPasswordVisible ? <FiEyeOff size={20} /> : <FiEye size={20} />}
@@ -82,5 +89,3 @@ const PasswordInput = () => {
     </InputContainer>
   );
 };
-
-export default PasswordInput;

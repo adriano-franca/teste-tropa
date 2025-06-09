@@ -99,7 +99,7 @@ const PaginationWrapper = styled.div`
 `;
 const PageButton = styled.button`
   padding: 8px 14px;
-  border-radius: 8px;
+  border-radius: 14px;
   border: 1px solid #E0E0E0;
   cursor: pointer;
   font-weight: 500;
@@ -129,7 +129,7 @@ const StatusBadge = styled.span`
   }
 `;
 
-export default function EventosPage({ data = [], pagination = {} }) {
+export default function TablePage({ data = [], pagination = {} }) {
   const { currentPage, totalPages, onPageChange } = pagination;
 
   const columns = [

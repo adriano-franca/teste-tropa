@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import {
   FiGrid, FiCalendar, FiClock, FiUsers, FiUser, FiLogOut
 } from 'react-icons/fi';
+import logoUrl from '../assets/logo.png';
+import avatarUrl from '../assets/perfil.jpg';
 
 const SidebarContainer = styled.aside`
   display: flex;
@@ -15,20 +17,18 @@ const SidebarContainer = styled.aside`
   border-right: 1px solid #F0F0F0;
   font-family: Arial, sans-serif;
   flex-shrink: 0;
-`;
+`
 
-const TopSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+const TopSection = styled.div``;
 const BottomSection = styled.div``;
 
+const ContainerLogo = styled.div``;
+
 const Logo = styled.img`
-  width: 235px;
   display: block;
   margin-bottom: 32px;
   height: 32px;
+  max-width: 100%;
 `;
 
 const MenuHeader = styled.h3`
@@ -38,7 +38,6 @@ const MenuHeader = styled.h3`
   letter-spacing: 1px;
   padding: 0 12px;
   margin-bottom: 8px;
-  align-self: flex-start;
 `;
 
 const NavList = styled.ul`
@@ -105,7 +104,7 @@ const UserActionsList = styled.div`
   align-items: stretch;
 `;
 
-export default function Sidebar({ logoUrl, user, activePath }) {
+export default function Sidebar({ user = {}, activePath, onLogout }) {
   const menuItems = [
     { label: 'Dashboard', icon: <FiGrid size={20} />, path: '/dashboard' },
     { label: 'Eventos', icon: <FiCalendar size={20} />, path: '/eventos' },
@@ -115,13 +114,15 @@ export default function Sidebar({ logoUrl, user, activePath }) {
 
   const userActions = [
     { label: 'Alterar dados', icon: <FiUser size={18} />, action: () => alert('Abrir modal de dados...') },
-    { label: 'Sair', icon: <FiLogOut size={18} />, action: () => alert('Saindo...') },
+    { label: 'Sair', icon: <FiLogOut size={18} />, action: onLogout },
   ];
 
   return (
     <SidebarContainer>
       <TopSection>
-        <Logo src={logoUrl} alt="Logo" />
+        <ContainerLogo>
+          <Logo src={logoUrl} alt="Logo" />
+        </ContainerLogo>
         <MenuHeader>Menu</MenuHeader>
         <NavList>
           {menuItems.map(item => (
@@ -138,7 +139,7 @@ export default function Sidebar({ logoUrl, user, activePath }) {
       <BottomSection>
         <Separator />
         <ProfileWrapper>
-          <Avatar src={user.avatarUrl} alt="Avatar" />
+          <Avatar src={avatarUrl} alt="Avatar" />
           <UserDetails>
             <UserName>{user.name}</UserName>
             <UserRole>{user.role}</UserRole>
