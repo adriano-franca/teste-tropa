@@ -5,7 +5,7 @@
     "password": "123",
     "name": "Kaique Steck",
     "role": "Administrador",
-    "avatarUrl": "../src/assets/perfil.jpg"
+    "avatarUrl": "/avatars/kaique.png"
   },
   {
     "id": 2,
@@ -13,7 +13,7 @@
     "password": "456",
     "name": "Adriano França",
     "role": "Editor",
-    "avatarUrl": "../src/assets/perfil.jpg"
+    "avatarUrl": "/avatars/perfil.jpg"
   },
   {
     "id": 3,
@@ -21,6 +21,14 @@
     "password": "1234",
     "name": "Adriano França",
     "role": "Administrador",
-    "avatarUrl": "../src/assets/perfil.jpg"
+    "avatarUrl": "/avatars/perfil.jpg"
+  },
+  {
+    "id": 4,
+    "email": "liandra@email.com",
+    "password": "123",
+    "name": "Liandra Corrêa",
+    "role": "Administrador",
+    "avatarUrl": "/avatars/perfil.jpg"
   }
 ]

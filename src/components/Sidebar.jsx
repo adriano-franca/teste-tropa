@@ -4,7 +4,6 @@ import {
   FiGrid, FiCalendar, FiClock, FiUsers, FiUser, FiLogOut
 } from 'react-icons/fi';
 import logoUrl from '../assets/logo.png';
-import avatarUrl from '../assets/perfil.jpg';
 
 const SidebarContainer = styled.aside`
   display: flex;
@@ -106,10 +105,10 @@ const UserActionsList = styled.div`
 
 export default function Sidebar({ user = {}, activePath, onLogout }) {
   const menuItems = [
-    { label: 'Dashboard', icon: <FiGrid size={20} />, path: '/dashboard' },
-    { label: 'Eventos', icon: <FiCalendar size={20} />, path: '/eventos' },
-    { label: 'Equipes', icon: <FiClock size={20} />, path: '/equipes' },
-    { label: 'Inscrições', icon: <FiUsers size={20} />, path: '/inscricoes' },
+    { label: 'Dashboard', icon: <FiGrid size={20} />, path: '/dashboard', action: () => alert('Abrir Dashboard...') },
+    { label: 'Eventos', icon: <FiCalendar size={20} />, path: '/eventos', action: () => alert('Abrir Eventos...') },
+    { label: 'Equipes', icon: <FiClock size={20} />, path: '/equipes', action: () => alert('Abrir Equipes...') },
+    { label: 'Inscrições', icon: <FiUsers size={20} />, path: '/inscricoes', action: () => alert('Abrir Inscrições...') },
   ];
 
   const userActions = [
@@ -127,7 +126,7 @@ export default function Sidebar({ user = {}, activePath, onLogout }) {
         <NavList>
           {menuItems.map(item => (
             <li key={item.label}>
-              <NavLink href={item.path} isActive={activePath === item.path}>
+              <NavLink onClick={item.action} href={item.path} isActive={activePath === item.path}>
                 {item.icon}
                 <span>{item.label}</span>
               </NavLink>
@@ -139,7 +138,7 @@ export default function Sidebar({ user = {}, activePath, onLogout }) {
       <BottomSection>
         <Separator />
         <ProfileWrapper>
-          <Avatar src={avatarUrl} alt="Avatar" />
+          <Avatar src={user.avatarUrl} alt="Avatar" />
           <UserDetails>
             <UserName>{user.name}</UserName>
             <UserRole>{user.role}</UserRole>
