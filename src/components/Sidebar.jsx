@@ -105,10 +105,10 @@ const UserActionsList = styled.div`
 
 export default function Sidebar({ user = {}, activePath, onLogout }) {
   const menuItems = [
-    { label: 'Dashboard', icon: <FiGrid size={20} />, path: '/dashboard', action: () => alert('Abrir Dashboard...') },
+    { label: 'Dashboard', icon: <FiGrid size={20} />, action: () => alert('Abrir Dashboard...') },
     { label: 'Eventos', icon: <FiCalendar size={20} />, path: '/eventos', action: () => alert('Abrir Eventos...') },
-    { label: 'Equipes', icon: <FiClock size={20} />, path: '/equipes', action: () => alert('Abrir Equipes...') },
-    { label: 'Inscrições', icon: <FiUsers size={20} />, path: '/inscricoes', action: () => alert('Abrir Inscrições...') },
+    { label: 'Equipes', icon: <FiClock size={20} />, action: () => alert('Abrir Equipes...') },
+    { label: 'Inscrições', icon: <FiUsers size={20} />, action: () => alert('Abrir Inscrições...') },
   ];
 
   const userActions = [

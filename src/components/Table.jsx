@@ -62,7 +62,8 @@ const TableWrapper = styled.div`
   background-color: #FFFFFF;
   border: 1px solid #F0F0F0;
   border-radius: 16px;
-  overflow: hidden;
+  position: relative;
+  z-index: 1;
 `;
 const StyledTable = styled.table`
   width: 100%;
