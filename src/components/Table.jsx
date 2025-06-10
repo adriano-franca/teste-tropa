@@ -130,7 +130,12 @@ const StatusBadge = styled.span`
   }
 `;
 
-export default function TablePage({ data = [], pagination = {} }) {
+export default function TablePage({
+  data = [],
+  pagination = {},
+  searchQuery,
+  onSearchChange,
+}) {
   const { currentPage, totalPages, onPageChange } = pagination;
 
   const columns = [
@@ -163,7 +168,11 @@ export default function TablePage({ data = [], pagination = {} }) {
         <ActionsContainer>
           <SearchWrapper>
             <SearchIcon size={18} />
-            <SearchInput placeholder="Buscar eventos" />
+            <SearchInput
+              placeholder="Buscar eventos"
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
+            />
           </SearchWrapper>
           <Button primary onClick={() => alert('Abrir modal de novo evento!')}>
             <FiPlus size={20} />

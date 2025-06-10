@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import Sidebar from '../components/Sidebar';
-import TablePage from '../components/Table';
+import TablePage from '../components/Table'; 
 
 const AppLayout = styled.div`
   display: flex;
@@ -33,17 +33,18 @@ export default function DashboardLayout({ user, onLogout }) {
   const [eventos, setEventos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
   
   const ITEMS_PER_PAGE = 10;
 
   useEffect(() => {
     const fetchEventos = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch('/eventos.json');
-        if (!response.ok) {
-          throw new Error('Não foi possível carregar os dados dos eventos.');
-        }
+        if (!response.ok) throw new Error('Erro ao carregar dados.');
         const data = await response.json();
         setEventos(data);
       } catch (err) {
@@ -52,15 +53,24 @@ export default function DashboardLayout({ user, onLogout }) {
         setIsLoading(false);
       }
     };
-
     fetchEventos();
   }, []);
 
-  const totalPages = Math.ceil(eventos.length / ITEMS_PER_PAGE);
+  const filteredEventos = useMemo(() => {
+    if (!searchQuery) return eventos;
+    return eventos.filter(evento =>
+      evento.nome.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [eventos, searchQuery]);
+  
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
 
+  const totalPages = Math.ceil(filteredEventos.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentTableData = eventos.slice(startIndex, endIndex);
+  const currentTableData = filteredEventos.slice(startIndex, endIndex);
 
   return (
     <AppLayout>
@@ -77,12 +87,14 @@ export default function DashboardLayout({ user, onLogout }) {
           </WelcomeMessage>
         </ContentHeader>
 
-        {isLoading && <p>Carregando dados dos eventos...</p>}
+        {isLoading && <p>Carregando dados...</p>}
         {error && <p style={{ color: 'red' }}>{error}</p>}
         
         {!isLoading && !error && (
           <TablePage
             data={currentTableData}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
             pagination={{
               currentPage: currentPage,
               totalPages: totalPages,
