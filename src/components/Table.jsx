@@ -22,6 +22,8 @@ const PageTitle = styled.h1`
 `;
 const ActionsContainer = styled.div`
   display: flex;
+  padding : 16px;
+  justify-content: flex-end;
   gap: 16px;
 `;
 const SearchWrapper = styled.div`
@@ -64,6 +66,9 @@ const TableWrapper = styled.div`
   border-radius: 16px;
   position: relative;
   z-index: 1;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
 `;
 const StyledTable = styled.table`
   width: 100%;
@@ -97,6 +102,7 @@ const PaginationWrapper = styled.div`
   align-items: center;
   margin-top: 24px;
   gap: 8px;
+  padding: 16px;
 `;
 const PageButton = styled.button`
   padding: 8px 14px;
@@ -165,6 +171,9 @@ export default function TablePage({
     <PageWrapper>
       <PageHeader>
         <PageTitle>Eventos</PageTitle>
+      </PageHeader>
+      
+      <TableWrapper>
         <ActionsContainer>
           <SearchWrapper>
             <SearchIcon size={18} />
@@ -179,9 +188,6 @@ export default function TablePage({
             Inserir novo
           </Button>
         </ActionsContainer>
-      </PageHeader>
-      
-      <TableWrapper>
         <StyledTable>
           <TableHead>
             <tr>
@@ -202,9 +208,7 @@ export default function TablePage({
             ))}
           </tbody>
         </StyledTable>
-      </TableWrapper>
-
-      {totalPages > 1 && (
+        {totalPages > 1 && (
         <PaginationWrapper>
           <PageButton onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
             Anterior
@@ -223,6 +227,8 @@ export default function TablePage({
           </PageButton>
         </PaginationWrapper>
       )}
-    </PageWrapper>
+      
+      </TableWrapper>
+      </PageWrapper>
   );
 }

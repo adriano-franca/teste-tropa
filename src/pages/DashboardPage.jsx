@@ -37,7 +37,7 @@ export default function DashboardLayout({ user, onLogout }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   
-  const ITEMS_PER_PAGE = 10;
+  const ITEMS_PER_PAGE = 5;
 
   useEffect(() => {
     const fetchEventos = async () => {

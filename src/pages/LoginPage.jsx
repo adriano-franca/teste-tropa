@@ -123,6 +123,7 @@ export default function LoginPage({ onLoginSuccess }) {
               disabled={isLoading}
             />
             <PasswordField
+              label="Senha"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               disabled={isLoading}
