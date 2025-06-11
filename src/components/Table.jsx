@@ -107,11 +107,33 @@ const PaginationWrapper = styled.div`
   align-items: center;
   margin-top: 24px;
   gap: 8px;
-  padding-top: 16px;
-  padding-left: 16px;
-  padding-right: 16px;
-  padding-bottom: 32px;
+  padding: 16px 0 32px 0; 
+
+  @media (max-width: 900px) {
+    justify-content: space-evenly;
+  }
 `;
+
+const PageNumbersContainer = styled.div`
+  display: flex;
+  gap: 8px;
+
+  @media (max-width: 768px) {
+    display: none; /* Esconde os números em telas pequenas */
+  }
+`;
+
+const CurrentPageIndicator = styled.span`
+  display: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;
+
 const PageButton = styled.button`
   padding: 8px 14px;
   border-radius: 8px;
@@ -231,6 +253,7 @@ export default function TablePage({
             <PageButton onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
               Anterior
             </PageButton>
+            <PageNumbersContainer>
             {[...Array(totalPages).keys()].map(num => (
               <PageButton
                 key={num + 1}
@@ -240,6 +263,12 @@ export default function TablePage({
                 {num + 1}
               </PageButton>
             ))}
+            </PageNumbersContainer>
+
+            <CurrentPageIndicator>
+              {currentPage}/{totalPages}
+            </CurrentPageIndicator>
+
             <PageButton onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages}>
               Próxima
             </PageButton>
