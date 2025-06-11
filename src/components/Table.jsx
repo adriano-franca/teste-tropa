@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { FiPlus, FiSearch } from 'react-icons/fi';
 import ContextMenu from './ContextMenu';
@@ -100,7 +100,6 @@ const TableCell = styled.td`
   vertical-align: middle;
   white-space: nowrap;
 `;
-
 const PaginationWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -177,6 +176,22 @@ export default function TablePage({
   onRemoveClick,
 }) {
   const { currentPage, totalPages, onPageChange } = pagination;
+  const [openMenuId, setOpenMenuId] = useState(null);
+
+  const handleMenuToggle = (rowId) => {
+    setOpenMenuId(prevId => (prevId === rowId ? null : rowId));
+  };
+
+  useEffect(() => {
+    const handleCloseMenus = () => setOpenMenuId(null);
+    window.addEventListener('click', handleCloseMenus);
+    window.addEventListener('scroll', handleCloseMenus, true);
+
+    return () => {
+      window.removeEventListener('click', handleCloseMenus);
+      window.removeEventListener('scroll', handleCloseMenus, true);
+    };
+  }, []);
 
   const columns = [
     { key: 'nome', header: 'Nome do evento' },
@@ -193,9 +208,20 @@ export default function TablePage({
       style: { textAlign: 'right', width: '50px' },
       render: (row) => (
         <ContextMenu
-          onView={() => onViewClick(row)}
-          onEdit={() => onEditClick(row)}
-          onRemove={() => onRemoveClick(row)}
+          isOpen={openMenuId === row.id}
+          onToggle={() => handleMenuToggle(row.id)}
+          onView={() => {
+            onViewClick(row);
+            setOpenMenuId(null);
+          }}
+          onEdit={() => {
+            onEditClick(row);
+            setOpenMenuId(null);
+          }}
+          onRemove={() => {
+            onRemoveClick(row);
+            setOpenMenuId(null);
+          }}
         />
       )
     },

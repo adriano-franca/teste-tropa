@@ -62,19 +62,18 @@ const MenuButton = styled.button`
   }
 `;
 
-export default function ContextMenu({ onView, onEdit, onRemove }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [position, setPosition] = useState({ top: 0, left: 0 });
+export default function ContextMenu({ isOpen, onToggle, onView, onEdit, onRemove }) {
   const triggerRef = useRef(null);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
 
   const menuActions = [
     { label: 'Visualizar', icon: <FiEye size={18} />, action: onView },
     { label: 'Editar', icon: <FiEdit2 size={18} />, action: onEdit },
     { label: 'Remover', icon: <FiTrash2 size={18} />, action: onRemove, isDestructive: true },
   ];
-
-  const handleToggle = () => {
-    if (triggerRef.current) {
+  
+  useEffect(() => {
+    if (isOpen && triggerRef.current) {
       const rect = triggerRef.current.getBoundingClientRect();
       const spaceBelow = window.innerHeight - rect.bottom;
       const menuHeight = 160;
@@ -85,25 +84,7 @@ export default function ContextMenu({ onView, onEdit, onRemove }) {
 
       setPosition({ top: topPos, left: rect.right + window.scrollX });
     }
-    setIsOpen(true);
-  };
-  
-  useEffect(() => {
-    const handleClose = () => setIsOpen(false);
-    if (isOpen) {
-      window.addEventListener("click", handleClose);
-      window.addEventListener("scroll", handleClose);
-    }
-    return () => {
-      window.removeEventListener("click", handleClose);
-      window.removeEventListener("scroll", handleClose);
-    };
   }, [isOpen]);
-  
-  const handleActionClick = (action) => {
-    if (action) action();
-    setIsOpen(false);
-  };
 
   const Menu = (
     <MenuList 
@@ -112,10 +93,7 @@ export default function ContextMenu({ onView, onEdit, onRemove }) {
     >
       {menuActions.map((item, index) => (
         <MenuItem key={index}>
-          <MenuButton 
-            onClick={() => handleActionClick(item.action)}
-            isDestructive={item.isDestructive}
-          >
+          <MenuButton onClick={item.action} isDestructive={item.isDestructive}>
             {item.icon}
             <span>{item.label}</span>
           </MenuButton>
@@ -128,7 +106,7 @@ export default function ContextMenu({ onView, onEdit, onRemove }) {
     <MenuWrapper>
       <TriggerButton ref={triggerRef} onClick={(e) => {
         e.stopPropagation();
-        handleToggle();
+        onToggle();
       }}>
         <FiMoreVertical size={20} color="#555" />
       </TriggerButton>
