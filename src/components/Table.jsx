@@ -13,8 +13,6 @@ const PageHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 32px;
-  flex-wrap: wrap; 
-  gap: 16px;
 `;
 const PageTitle = styled.h1`
   font-size: 1.75rem;
@@ -23,27 +21,46 @@ const PageTitle = styled.h1`
 `;
 const ActionsContainer = styled.div`
   display: flex;
+  padding : 16px;
+  justify-content: flex-end;
   gap: 16px;
+  flex-wrap: wrap;
 `;
 const SearchWrapper = styled.div`
   position: relative;
+  display: flex;
+  align-items: center;
   width: 250px;
-`;
-const SearchInput = styled.input`
-  width: 100%;
-  padding: 12px 16px 12px 40px;
   border-radius: 50px;
   border: 1px solid #E0E0E0;
   background-color: #FFFFFF;
+  padding: 0 16px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &:focus-within {
+    border-color: #E87A3E;
+    box-shadow: 0 0 0 2px rgba(232, 122, 62, 0.2);
+  }
+`;
+const SearchInput = styled.input`
+  width: 100%;
+  border: none;
+  background-color: transparent;
   font-size: 0.9rem;
-  &:focus { outline: none; border-color: #E87A3E; }
+  padding: 12px 0;
+  margin-left: 8px;
+
+  &::placeholder {
+    color: #A0A0A0;
+  }
+
+  &:focus {
+    outline: none;
+  }
 `;
 const SearchIcon = styled(FiSearch)`
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
   color: #A0A0A0;
+  flex-shrink: 0;
 `;
 const Button = styled.button`
   display: flex;
@@ -67,7 +84,6 @@ const TableWrapper = styled.div`
 
 const ScrollableContainer = styled.div`
   overflow-x: auto;
-  border-radius: 16px;
 `;
 
 const StyledTable = styled.table`
@@ -147,7 +163,6 @@ const StatusBadge = styled.span`
   display: flex;
   align-items: center;
   gap: 8px;
-
   &::before {
     content: '';
     display: inline-block;
@@ -186,7 +201,6 @@ export default function TablePage({
     const handleCloseMenus = () => setOpenMenuId(null);
     window.addEventListener('click', handleCloseMenus);
     window.addEventListener('scroll', handleCloseMenus, true);
-
     return () => {
       window.removeEventListener('click', handleCloseMenus);
       window.removeEventListener('scroll', handleCloseMenus, true);
@@ -231,6 +245,9 @@ export default function TablePage({
     <PageWrapper>
       <PageHeader>
         <PageTitle>Todos eventos</PageTitle>
+      </PageHeader>
+      
+      <TableWrapper>
         <ActionsContainer>
           <SearchWrapper>
             <SearchIcon size={18} />
@@ -245,9 +262,6 @@ export default function TablePage({
             Inserir novo
           </Button>
         </ActionsContainer>
-      </PageHeader>
-      
-      <TableWrapper>
         <ScrollableContainer>
           <StyledTable>
             <TableHead>
