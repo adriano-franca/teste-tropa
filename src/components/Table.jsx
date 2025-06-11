@@ -180,6 +180,14 @@ const StatusBadge = styled.span`
   }
 `;
 
+const NoResultsCell = styled.td`
+  text-align: center;
+  padding: 48px;
+  color: #A0A0A0;
+  font-style: italic;
+  font-size: 1rem;
+`;
+
 export default function TablePage({
   data = [],
   pagination = {},
@@ -272,18 +280,26 @@ export default function TablePage({
               </tr>
             </TableHead>
             <tbody>
-              {data.map((row) => (
-                <TableRow key={row.id}>
-                  {columns.map((col) => (
-                    <TableCell 
-                      key={col.key} 
-                      style={col.style}
-                    >
-                      {col.render ? col.render(row) : row[col.key]}
-                    </TableCell>
-                  ))}
+              {data.length > 0 ? (
+                data.map((row) => (
+                  <TableRow key={row.id}>
+                    {columns.map((col) => (
+                      <TableCell 
+                        key={col.key} 
+                        style={col.style}
+                      >
+                        {col.render ? col.render(row) : row[col.key]}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <NoResultsCell colSpan={columns.length}>
+                    {searchQuery ? `Nenhum resultado encontrado para "${searchQuery}"` : "Nenhum evento para exibir"}
+                  </NoResultsCell>
                 </TableRow>
-              ))}
+              )}
             </tbody>
           </StyledTable>
         </ScrollableContainer>

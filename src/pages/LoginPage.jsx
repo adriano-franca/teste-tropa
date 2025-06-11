@@ -100,8 +100,6 @@ export default function LoginPage({ onLoginSuccess }) {
     const response = await fetch('/users.json');
     const users = await response.json();
 
-    console.log('Usuários carregados do JSON:', users);
-
     const foundUser = users.find((user) => {
       return user.email === email && user.password === password;
     });
