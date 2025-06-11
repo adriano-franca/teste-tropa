@@ -19,7 +19,7 @@ const MainContent = styled.main`
   padding: 32px 48px;
   transition: filter 0.3s ease-in-out;
 
-  @media (max-width: 992px) {
+  @media (max-width: 900px) {
     padding: 24px;
   }
 `;
@@ -43,7 +43,7 @@ const MenuToggleButton = styled.button`
   cursor: pointer;
   z-index: 998;
 
-  @media (max-width: 992px) {
+  @media (max-width: 900px) {
     display: flex;
   }
 `;
@@ -134,16 +134,16 @@ export default function DashboardLayout({ user, onLogout }) {
     openModal('Funcionalidade Indisponível', 'A criação de um novo evento será implementada em breve.');
   };
   
-  const handleViewClick = (item) => {
-    openModal('Funcionalidade Indisponível', `A visualização detalhada para o evento "${item.nome}" será implementada em breve.`);
+  const handleViewClick = () => {
+    openModal('Funcionalidade Indisponível', `A visualização detalhada para o evento será implementada em breve.`);
   };
 
-  const handleEditClick = (item) => {
-    openModal('Funcionalidade Indisponível', `A edição para o evento "${item.nome}" será implementada em breve.`);
+  const handleEditClick = () => {
+    openModal('Funcionalidade Indisponível', `A edição para o evento será implementada em breve.`);
   };
 
-  const handleRemoveClick = (item) => {
-    openModal('Ação Indisponível', `A remoção para o evento "${item.nome}" será implementada em breve.`);
+  const handleRemoveClick = () => {
+    openModal('Ação Indisponível', `A remoção para o evento será implementada em breve.`);
   };
   
   const handleEditProfileClick = () => {

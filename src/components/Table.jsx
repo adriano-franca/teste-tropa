@@ -13,6 +13,8 @@ const PageHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 32px;
+  flex-wrap: wrap; 
+  gap: 16px;
 `;
 const PageTitle = styled.h1`
   font-size: 1.75rem;
@@ -21,8 +23,6 @@ const PageTitle = styled.h1`
 `;
 const ActionsContainer = styled.div`
   display: flex;
-  padding : 16px;
-  justify-content: flex-end;
   gap: 16px;
 `;
 const SearchWrapper = styled.div`
@@ -35,7 +35,6 @@ const SearchInput = styled.input`
   border-radius: 50px;
   border: 1px solid #E0E0E0;
   background-color: #FFFFFF;
-  align-items: center;
   font-size: 0.9rem;
   &:focus { outline: none; border-color: #E87A3E; }
 `;
@@ -100,6 +99,10 @@ const TableCell = styled.td`
   color: #333;
   vertical-align: middle;
   white-space: nowrap;
+
+  &.actions-cell{
+    position: relative;
+  }
 `;
 const PaginationWrapper = styled.div`
   display: flex;
@@ -107,10 +110,10 @@ const PaginationWrapper = styled.div`
   align-items: center;
   margin-top: 24px;
   gap: 8px;
-  padding: 16px 0 32px 0; 
+  padding: 16px;
 
   @media (max-width: 900px) {
-    justify-content: space-evenly;
+    justify-content: space-between;
   }
 `;
 
@@ -118,8 +121,8 @@ const PageNumbersContainer = styled.div`
   display: flex;
   gap: 8px;
 
-  @media (max-width: 768px) {
-    display: none; /* Esconde os números em telas pequenas */
+  @media (max-width: 900px) {
+    display: none;
   }
 `;
 
@@ -129,7 +132,7 @@ const CurrentPageIndicator = styled.span`
   font-weight: 500;
   color: #555;
 
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     display: block;
   }
 `;
@@ -204,10 +207,7 @@ export default function TablePage({
   return (
     <PageWrapper>
       <PageHeader>
-        <PageTitle>Eventos</PageTitle>
-      </PageHeader>
-      
-      <TableWrapper>
+        <PageTitle>Todos eventos</PageTitle>
         <ActionsContainer>
           <SearchWrapper>
             <SearchIcon size={18} />
@@ -222,6 +222,9 @@ export default function TablePage({
             Inserir novo
           </Button>
         </ActionsContainer>
+      </PageHeader>
+      
+      <TableWrapper>
         <ScrollableContainer>
           <StyledTable>
             <TableHead>
@@ -238,7 +241,7 @@ export default function TablePage({
                     <TableCell 
                       key={col.key} 
                       style={col.style}
-                      className={col.key === 'actions' ? 'actions-cell' : ''}
+                      className='{col.key === "actions" ? "actions-cell" : ""}'
                     >
                       {col.render ? col.render(row) : row[col.key]}
                     </TableCell>
@@ -254,21 +257,19 @@ export default function TablePage({
               Anterior
             </PageButton>
             <PageNumbersContainer>
-            {[...Array(totalPages).keys()].map(num => (
-              <PageButton
-                key={num + 1}
-                isActive={currentPage === num + 1}
-                onClick={() => onPageChange(num + 1)}
-              >
-                {num + 1}
-              </PageButton>
-            ))}
+              {[...Array(totalPages).keys()].map(num => (
+                <PageButton
+                  key={num + 1}
+                  isActive={currentPage === num + 1}
+                  onClick={() => onPageChange(num + 1)}
+                >
+                  {num + 1}
+                </PageButton>
+              ))}
             </PageNumbersContainer>
-
             <CurrentPageIndicator>
-              {currentPage}/{totalPages}
+              {currentPage} / {totalPages}
             </CurrentPageIndicator>
-
             <PageButton onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages}>
               Próxima
             </PageButton>
