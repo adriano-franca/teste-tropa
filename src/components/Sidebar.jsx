@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {
   FiGrid, FiCalendar, FiClock, FiUsers, FiUser, FiLogOut, FiX
 } from 'react-icons/fi';
-import logoUrl from '../assets/logo.png';
+import logoImage from '../assets/logo.png';
 
 const SidebarContainer = styled.aside`
   display: flex;
@@ -19,9 +19,8 @@ const SidebarContainer = styled.aside`
   transition: transform 0.3s ease-in-out;
   z-index: 1000;
 
-  /* Media Query para telas menores */
-  @media (max-width: 900px) {
-    position: fixed; 
+  @media (max-width: 992px) {
+    position: fixed;
     top: 0;
     left: 0;
     transform: translateX(${props => (props.isOpen ? '0' : '-100%')});
@@ -55,8 +54,8 @@ const CloseButton = styled.button`
   cursor: pointer;
   padding: 0;
 
-  @media (max-width: 900px) {
-    display: block; 
+  @media (max-width: 992px) {
+    display: block;
   }
 `;
 
@@ -133,23 +132,23 @@ const UserActionsList = styled.div`
   align-items: stretch;
 `;
 
-export default function Sidebar({ user = {}, activePath, onLogout, isOpen, onClose }) {
+export default function Sidebar({ user = {}, activePath, onLogout, isOpen, onClose, onMenuItemClick, onEditProfile }) {
   const menuItems = [
-    { label: 'Dashboard', icon: <FiGrid size={20} />, path: '/dashboard', action: () => alert('Abrir Dashboard...') },
-    { label: 'Eventos', icon: <FiCalendar size={20} />, path: '/eventos', action: () => alert('Abrir Eventos...') },
-    { label: 'Equipes', icon: <FiClock size={20} />, path: '/equipes', action: () => alert('Abrir Equipes...') },
-    { label: 'Inscrições', icon: <FiUsers size={20} />, path: '/inscricoes', action: () => alert('Abrir Inscrições...') },
+    { label: 'Dashboard', icon: <FiGrid size={20} />, path: '/dashboard' },
+    { label: 'Eventos', icon: <FiCalendar size={20} />, path: '/eventos' },
+    { label: 'Equipes', icon: <FiClock size={20} />, path: '/equipes' },
+    { label: 'Inscrições', icon: <FiUsers size={20} />, path: '/inscricoes' },
   ];
 
   const userActions = [
-    { label: 'Alterar dados', icon: <FiUser size={18} />, action: () => alert('Abrir modal de dados...') },
+    { label: 'Alterar dados', icon: <FiUser size={18} />, action: onEditProfile },
     { label: 'Sair', icon: <FiLogOut size={18} />, action: onLogout },
   ];
 
-  const handleLinkClick = (e, action) => {
+  const handleLinkClick = (e, item) => {
     e.preventDefault();
-    if (action) {
-      action();
+    if (onMenuItemClick) {
+      onMenuItemClick(item);
     }
   };
 
@@ -158,7 +157,7 @@ export default function Sidebar({ user = {}, activePath, onLogout, isOpen, onClo
       <TopSection>
         <SidebarHeader>
           <ContainerLogo>
-            <Logo src={logoUrl} alt="Logo" />
+            <Logo src={logoImage} alt="Logo" />
           </ContainerLogo>
           <CloseButton onClick={onClose}>
             <FiX size={24} color="#555" />
@@ -171,7 +170,7 @@ export default function Sidebar({ user = {}, activePath, onLogout, isOpen, onClo
               <NavLink 
                 href={item.path} 
                 isActive={activePath === item.path}
-                onClick={(e) => handleLinkClick(e, item.action)}
+                onClick={(e) => handleLinkClick(e, item)}
               >
                 {item.icon}
                 <span>{item.label}</span>

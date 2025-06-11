@@ -7,7 +7,6 @@ const PageWrapper = styled.div`
   padding: 32px;
   background-color: #FAFAFA;
   font-family: Arial, sans-serif;
-  height: 100vh;
 `;
 const PageHeader = styled.div`
   display: flex;
@@ -36,6 +35,7 @@ const SearchInput = styled.input`
   border-radius: 50px;
   border: 1px solid #E0E0E0;
   background-color: #FFFFFF;
+  align-items: center;
   font-size: 0.9rem;
   &:focus { outline: none; border-color: #E87A3E; }
 `;
@@ -64,9 +64,11 @@ const TableWrapper = styled.div`
   background-color: #FFFFFF;
   border: 1px solid #F0F0F0;
   border-radius: 16px;
-  position: relative;
-  z-index: 1;
-  overflow-x: auto; 
+`;
+
+const ScrollableContainer = styled.div`
+  overflow-x: auto;
+  border-radius: 16px;
 `;
 
 const StyledTable = styled.table`
@@ -84,6 +86,7 @@ const TableHead = styled.thead`
     text-transform: uppercase;
     font-weight: bold;
     letter-spacing: 0.5px;
+    white-space: nowrap;
   }
 `;
 const TableRow = styled.tr`
@@ -96,6 +99,7 @@ const TableCell = styled.td`
   font-size: 0.95rem;
   color: #333;
   vertical-align: middle;
+  white-space: nowrap;
 `;
 const PaginationWrapper = styled.div`
   display: flex;
@@ -110,7 +114,7 @@ const PaginationWrapper = styled.div`
 `;
 const PageButton = styled.button`
   padding: 8px 14px;
-  border-radius: 14px;
+  border-radius: 8px;
   border: 1px solid #E0E0E0;
   cursor: pointer;
   font-weight: 500;
@@ -145,6 +149,10 @@ export default function TablePage({
   pagination = {},
   searchQuery,
   onSearchChange,
+  onNewClick,
+  onViewClick,
+  onEditClick,
+  onRemoveClick,
 }) {
   const { currentPage, totalPages, onPageChange } = pagination;
 
@@ -160,12 +168,12 @@ export default function TablePage({
     { 
       key: 'actions', 
       header: '',
-      style: { textAlign: 'right' },
+      style: { textAlign: 'right', width: '50px' },
       render: (row) => (
         <ContextMenu
-          onView={() => alert(`Visualizando: ${row.nome}`)}
-          onEdit={() => alert(`Editando: ${row.nome}`)}
-          onRemove={() => alert(`Removendo: ${row.nome}`)}
+          onView={() => onViewClick(row)}
+          onEdit={() => onEditClick(row)}
+          onRemove={() => onRemoveClick(row)}
         />
       )
     },
@@ -187,52 +195,57 @@ export default function TablePage({
               onChange={(e) => onSearchChange(e.target.value)}
             />
           </SearchWrapper>
-          <Button primary onClick={() => alert('Abrir modal de novo evento!')}>
+          <Button primary onClick={onNewClick}>
             <FiPlus size={20} />
             Inserir novo
           </Button>
         </ActionsContainer>
-        <StyledTable>
-          <TableHead>
-            <tr>
-              {columns.map((col) => (
-                <th key={col.key}>{col.header}</th>
-              ))}
-            </tr>
-          </TableHead>
-          <tbody>
-            {data.map((row) => (
-              <TableRow key={row.id}>
+        <ScrollableContainer>
+          <StyledTable>
+            <TableHead>
+              <tr>
                 {columns.map((col) => (
-                  <TableCell key={col.key} style={col.style}>
-                    {col.render ? col.render(row) : row[col.key]}
-                  </TableCell>
+                  <th key={col.key}>{col.header}</th>
                 ))}
-              </TableRow>
-            ))}
-          </tbody>
-        </StyledTable>
+              </tr>
+            </TableHead>
+            <tbody>
+              {data.map((row) => (
+                <TableRow key={row.id}>
+                  {columns.map((col) => (
+                    <TableCell 
+                      key={col.key} 
+                      style={col.style}
+                      className={col.key === 'actions' ? 'actions-cell' : ''}
+                    >
+                      {col.render ? col.render(row) : row[col.key]}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </tbody>
+          </StyledTable>
+        </ScrollableContainer>
         {totalPages > 1 && (
-        <PaginationWrapper>
-          <PageButton onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
-            Anterior
-          </PageButton>
-          {[...Array(totalPages).keys()].map(num => (
-            <PageButton
-              key={num + 1}
-              isActive={currentPage === num + 1}
-              onClick={() => onPageChange(num + 1)}
-            >
-              {num + 1}
+          <PaginationWrapper>
+            <PageButton onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
+              Anterior
             </PageButton>
-          ))}
-          <PageButton onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-            Próxima
-          </PageButton>
-        </PaginationWrapper>
-      )}
-      
+            {[...Array(totalPages).keys()].map(num => (
+              <PageButton
+                key={num + 1}
+                isActive={currentPage === num + 1}
+                onClick={() => onPageChange(num + 1)}
+              >
+                {num + 1}
+              </PageButton>
+            ))}
+            <PageButton onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+              Próxima
+            </PageButton>
+          </PaginationWrapper>
+        )}
       </TableWrapper>
-      </PageWrapper>
+    </PageWrapper>
   );
 }

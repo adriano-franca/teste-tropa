@@ -2,7 +2,8 @@ import React, { useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { FiMenu } from 'react-icons/fi';
 import Sidebar from '../components/Sidebar';
-import TablePage from '../components/Table'; 
+import TablePage from '../components/Table';
+import Modal from '../components/Modal';
 
 const AppLayout = styled.div`
   display: flex;
@@ -17,10 +18,9 @@ const MainContent = styled.main`
   overflow-y: auto;
   padding: 32px 48px;
   transition: filter 0.3s ease-in-out;
-  padding-bottom: 24px;
 
-  @media (max-width: 900px) {
-    padding: 8px;
+  @media (max-width: 992px) {
+    padding: 24px;
   }
 `;
 
@@ -43,7 +43,7 @@ const MenuToggleButton = styled.button`
   cursor: pointer;
   z-index: 998;
 
-  @media (max-width: 900px) {
+  @media (max-width: 992px) {
     display: flex;
   }
 `;
@@ -71,13 +71,6 @@ const WelcomeMessage = styled.p`
   }
 `;
 
-const BottomSpacing = styled.div`
-  height: 45vh;  
-  @media (max-width: 900px) {
-    height: 40vh;
-  }
-`;
-
 export default function DashboardLayout({ user, onLogout }) {
   const [eventos, setEventos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -87,6 +80,9 @@ export default function DashboardLayout({ user, onLogout }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState({ title: '', message: '' });
+
   const ITEMS_PER_PAGE = 10;
 
   useEffect(() => {
@@ -122,15 +118,58 @@ export default function DashboardLayout({ user, onLogout }) {
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const currentTableData = filteredEventos.slice(startIndex, endIndex);
 
+  const openModal = (title, message) => {
+    setModalContent({ title, message });
+    setIsModalOpen(true);
+    setIsSidebarOpen(false);
+  };
+
+  const handleMenuItemClick = (menuItem) => {
+    if (menuItem.path !== '/eventos') {
+      openModal('Em Desenvolvimento', `A tela "${menuItem.label}" ainda está sendo construída.`);
+    }
+  };
+  
+  const handleNewClick = () => {
+    openModal('Funcionalidade Indisponível', 'A criação de um novo evento será implementada em breve.');
+  };
+  
+  const handleViewClick = (item) => {
+    openModal('Funcionalidade Indisponível', `A visualização detalhada para o evento "${item.nome}" será implementada em breve.`);
+  };
+
+  const handleEditClick = (item) => {
+    openModal('Funcionalidade Indisponível', `A edição para o evento "${item.nome}" será implementada em breve.`);
+  };
+
+  const handleRemoveClick = (item) => {
+    openModal('Ação Indisponível', `A remoção para o evento "${item.nome}" será implementada em breve.`);
+  };
+  
+  const handleEditProfileClick = () => {
+    openModal('Funcionalidade Indisponível', 'A tela para alterar dados do perfil será implementada em breve.');
+  };
+
   return (
     <AppLayout>
+      <Modal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={modalContent.title}
+      >
+        <p>{modalContent.message}</p>
+      </Modal>
+
       <Overlay isOpen={isSidebarOpen} onClick={() => setIsSidebarOpen(false)} />
+      
       <Sidebar 
         user={user}
         onLogout={onLogout}
+        onEditProfile={handleEditProfileClick}
         activePath={'/eventos'}
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
+        onMenuItemClick={handleMenuItemClick}
       />
       
       <MainContent>
@@ -147,8 +186,11 @@ export default function DashboardLayout({ user, onLogout }) {
         {error && <p style={{ color: 'red' }}>{error}</p>}
         
         {!isLoading && !error && (
-          <>
           <TablePage
+            onNewClick={handleNewClick}
+            onViewClick={handleViewClick}
+            onEditClick={handleEditClick}
+            onRemoveClick={handleRemoveClick}
             data={currentTableData}
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
@@ -158,10 +200,7 @@ export default function DashboardLayout({ user, onLogout }) {
               onPageChange: (page) => setCurrentPage(page)
             }}
           />
-          <BottomSpacing />
-          </>
         )}
-
       </MainContent>
     </AppLayout>
   );
