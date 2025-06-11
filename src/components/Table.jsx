@@ -99,11 +99,8 @@ const TableCell = styled.td`
   color: #333;
   vertical-align: middle;
   white-space: nowrap;
-
-  &.actions-cell{
-    position: relative;
-  }
 `;
+
 const PaginationWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -112,7 +109,7 @@ const PaginationWrapper = styled.div`
   gap: 8px;
   padding: 16px;
 
-  @media (max-width: 900px) {
+  @media (max-width: 768px) {
     justify-content: space-between;
   }
 `;
@@ -121,7 +118,7 @@ const PageNumbersContainer = styled.div`
   display: flex;
   gap: 8px;
 
-  @media (max-width: 900px) {
+  @media (max-width: 768px) {
     display: none;
   }
 `;
@@ -132,7 +129,7 @@ const CurrentPageIndicator = styled.span`
   font-weight: 500;
   color: #555;
 
-  @media (max-width: 900px) {
+  @media (max-width: 768px) {
     display: block;
   }
 `;
@@ -241,7 +238,6 @@ export default function TablePage({
                     <TableCell 
                       key={col.key} 
                       style={col.style}
-                      className='{col.key === "actions" ? "actions-cell" : ""}'
                     >
                       {col.render ? col.render(row) : row[col.key]}
                     </TableCell>

@@ -1,11 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { FiMoreVertical, FiEye, FiEdit2, FiTrash2 } from 'react-icons/fi';
 
 const MenuWrapper = styled.div`
-  position: relative;
   display: inline-block;
-  font-family: Arial, sans-serif;
 `;
 
 const TriggerButton = styled.button`
@@ -24,8 +23,7 @@ const TriggerButton = styled.button`
 `;
 
 const MenuList = styled.ul`
-  position: absolute;
-  right: 0;
+  position: fixed;
   list-style: none;
   padding: 8px;
   margin: 0;
@@ -33,11 +31,9 @@ const MenuList = styled.ul`
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   width: max-content;
-  z-index: 10;
+  z-index: 2000;
   border: 1px solid #F0F0F0;
-  
-  top: ${props => props.position.top};
-  bottom: ${props => props.position.bottom};
+  transform: translateX(-100%);
 `;
 
 const MenuItem = styled.li`
@@ -68,39 +64,8 @@ const MenuButton = styled.button`
 
 export default function ContextMenu({ onView, onEdit, onRemove }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [position, setPosition] = useState({ top: 'calc(100% + 4px)', bottom: 'auto' });
-  const wrapperRef = useRef(null);
-  const menuRef = useRef(null);
-
-  const handleToggle = () => {
-    if (!isOpen && wrapperRef.current) {
-      const wrapperRect = wrapperRef.current.getBoundingClientRect();
-      const spaceBelow = window.innerHeight - wrapperRect.bottom;
-      const menuHeight = 160;
-
-      if (spaceBelow < menuHeight) {
-        setPosition({ top: 'auto', bottom: 'calc(100% + 4px)' });
-      } else {
-        setPosition({ top: 'calc(100% + 4px)', bottom: 'auto' });
-      }
-    }
-    setIsOpen(!isOpen);
-  };
-  
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [wrapperRef]);
-  
-  const handleActionClick = (action) => {
-    if (action) action();
-    setIsOpen(false);
-  };
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+  const triggerRef = useRef(null);
 
   const menuActions = [
     { label: 'Visualizar', icon: <FiEye size={18} />, action: onView },
@@ -108,27 +73,67 @@ export default function ContextMenu({ onView, onEdit, onRemove }) {
     { label: 'Remover', icon: <FiTrash2 size={18} />, action: onRemove, isDestructive: true },
   ];
 
+  const handleToggle = () => {
+    if (triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const menuHeight = 160;
+
+      const topPos = spaceBelow < menuHeight 
+        ? rect.top - menuHeight + window.scrollY 
+        : rect.bottom + window.scrollY;
+
+      setPosition({ top: topPos, left: rect.right + window.scrollX });
+    }
+    setIsOpen(true);
+  };
+  
+  useEffect(() => {
+    const handleClose = () => setIsOpen(false);
+    if (isOpen) {
+      window.addEventListener("click", handleClose);
+      window.addEventListener("scroll", handleClose);
+    }
+    return () => {
+      window.removeEventListener("click", handleClose);
+      window.removeEventListener("scroll", handleClose);
+    };
+  }, [isOpen]);
+  
+  const handleActionClick = (action) => {
+    if (action) action();
+    setIsOpen(false);
+  };
+
+  const Menu = (
+    <MenuList 
+      style={{ top: `${position.top}px`, left: `${position.left}px` }}
+      onClick={(e) => e.stopPropagation()}
+    >
+      {menuActions.map((item, index) => (
+        <MenuItem key={index}>
+          <MenuButton 
+            onClick={() => handleActionClick(item.action)}
+            isDestructive={item.isDestructive}
+          >
+            {item.icon}
+            <span>{item.label}</span>
+          </MenuButton>
+        </MenuItem>
+      ))}
+    </MenuList>
+  );
+
   return (
-    <MenuWrapper ref={wrapperRef}>
-      <TriggerButton onClick={handleToggle}>
+    <MenuWrapper>
+      <TriggerButton ref={triggerRef} onClick={(e) => {
+        e.stopPropagation();
+        handleToggle();
+      }}>
         <FiMoreVertical size={20} color="#555" />
       </TriggerButton>
 
-      {isOpen && (
-        <MenuList ref={menuRef} position={position}>
-          {menuActions.map((item, index) => (
-            <MenuItem key={index}>
-              <MenuButton 
-                onClick={() => handleActionClick(item.action)}
-                isDestructive={item.isDestructive}
-              >
-                {item.icon}
-                <span>{item.label}</span>
-              </MenuButton>
-            </MenuItem>
-          ))}
-        </MenuList>
-      )}
+      {isOpen && createPortal(Menu, document.body)}
     </MenuWrapper>
   );
 }
