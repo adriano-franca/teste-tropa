@@ -66,14 +66,15 @@ const TableWrapper = styled.div`
   border-radius: 16px;
   position: relative;
   z-index: 1;
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: column;
+  overflow-x: auto; 
 `;
+
 const StyledTable = styled.table`
   width: 100%;
   border-collapse: collapse;
+  min-width: 700px;
 `;
+
 const TableHead = styled.thead`
   th {
     padding: 16px;
@@ -102,7 +103,10 @@ const PaginationWrapper = styled.div`
   align-items: center;
   margin-top: 24px;
   gap: 8px;
-  padding: 16px;
+  padding-top: 16px;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 32px;
 `;
 const PageButton = styled.button`
   padding: 8px 14px;

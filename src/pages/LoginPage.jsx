@@ -14,6 +14,7 @@ const LoginPageWrapper = styled.div`
   min-height: 100vh;
   background-color: #F8F9FA;
   font-family: Arial, sans-serif;
+  padding: 16px;
 `;
 
 const LoginCard = styled.div`
@@ -24,6 +25,12 @@ const LoginCard = styled.div`
   border-radius: 24px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
   overflow: hidden;
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+    max-width: 450px;
+    box-shadow: none;
+  }
 `;
 
 const FormPanel = styled.div`
@@ -32,6 +39,10 @@ const FormPanel = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  @media (max-width: 900px) {
+    padding: 32px;
+  }
 `;
 
 const IllustrationPanel = styled.div`
@@ -39,7 +50,11 @@ const IllustrationPanel = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #FFEFE3; /* Tom de laranja mais claro, como na imagem */
+  background-color: #FFEFE3;
+
+  @media (max-width: 900px) {
+    display: none;
+  }
 `;
 
 const Illustration = styled.img`
