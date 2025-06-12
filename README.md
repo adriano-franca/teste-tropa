@@ -46,5 +46,5 @@ Acesse online em: https://teste-tropa.vercel.app/
 
 #### 4. Usuário para teste:
 
-User: admin@email.com
-Password: 1234
+- User: admin@email.com
+- Password: 1234
