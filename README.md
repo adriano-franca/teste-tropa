@@ -25,23 +25,23 @@ Criação de componentes e front de duas telas, sendo uma de login e outra de vi
 #### 1. Instale as dependências:
 
 npm install
-# ou
+##### ou
 yarn
-# ou
+##### ou
 pnpm install
 
-##### 2. Rode o projeto:
+#### 2. Rode o projeto:
 
 npm run dev
-# ou
+##### ou
 yarn dev
-# ou
+##### ou
 pnpm dev
 
 #### 3. Acesse em:
 
 http://localhost:3000
-# ou
+##### ou
 Acesse online em: https://teste-tropa.vercel.app/
 
 #### 4. Usuário para teste:
