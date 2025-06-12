@@ -22,13 +22,5 @@
     "name": "Adriano França",
     "role": "Administrador",
     "avatarUrl": "/avatars/perfil.jpg"
-  },
-  {
-    "id": 4,
-    "email": "liandra@email.com",
-    "password": "123",
-    "name": "Liandra Corrêa",
-    "role": "Administrador",
-    "avatarUrl": "/avatars/perfil.jpg"
   }
 ]
